@@ -1,0 +1,12 @@
+### dependency
+tqdm
+joblib
+dvc
+pandas==0.25.3
+xlrd==1.2.0
+numpy
+tensorflow
+PyYAML
+
+### local packages -
+-e .

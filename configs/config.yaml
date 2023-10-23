@@ -1,0 +1,19 @@
+# It contains all the configs required in the project
+
+source_data:
+  data_dir: data
+  data_file: CTBM.raw.xlsx
+  sheet_name: Codes
+
+artifacts:
+  ARTIFACTS_DIR: artifacts
+  PREPARED_DATA: prepared
+  TRAIN_DATA: train.txt
+  TEST_DATA: test.txt
+  FEATURIZED_DATA: features
+  VOCAB_DATA: vocab_data.pkl
+  TEXT_AS_INTEGER: text_as_integer.pkl
+  FEATURIZED_DATASET_DIR: dataset
+  FEATURIZED_DATASET_FILE: dataset.tfrecord
+  MODEL_DIR: model
+  CHECKPOINT_DIR: training_ckpt

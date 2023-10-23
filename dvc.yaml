@@ -1,0 +1,70 @@
+# add stages here 
+stages:
+  prepare_data:
+    cmd: python src/stage_01_prepare_data.py --config=configs/config.yaml --params=params.yaml
+    deps:
+    - src/stage_01_prepare_data.py
+    - data/CTBM.raw.xlsx
+    - configs/config.yaml
+    - src/utils/common.py
+    - src/utils/data_process.py
+    params:
+    - prepare.seed
+    outs:
+    - artifacts/prepared/train.txt
+
+  featurize_data:
+    cmd: python src/stage_02_featurization.py --config=configs/config.yaml --params=params.yaml
+    deps:
+    - src/stage_02_featurization.py
+    - artifacts/prepared/train.txt
+    - configs/config.yaml
+    - src/utils/common.py
+    - src/utils/data_process.py
+    params:
+    - featurize.seq_length
+    - featurize.batch_size
+    - featurize.buffer_size
+    outs:
+    - artifacts/features/vocab_data.pkl
+    - artifacts/features/text_as_integer.pkl
+    - artifacts/features/dataset.tfrecord
+
+  
+  train:
+    cmd: python src/stage_03_train.py --config=configs/config.yaml --params=params.yaml
+    deps:
+    - src/stage_03_train.py
+    - artifacts/features/vocab_data.pkl
+    - artifacts/features/text_as_integer.pkl
+    - artifacts/features/dataset.tfrecord
+    - configs/config.yaml
+    - src/utils/common.py
+    - src/utils/models.py
+    params:
+    - featurize.batch_size
+    - train.embedding_dim
+    - train.rnn_units
+    - train.epochs
+    - train.optimizer
+    - train.verbose
+    outs:
+    - artifacts/model
+
+  evaluate:
+    cmd: python src/stage_04_evaluate.py --config=configs/config.yaml --params=params.yaml
+    deps:
+    - src/stage_04_evaluate.py
+    - artifacts/features/vocab_data.pkl
+    - artifacts/features/text_as_integer.pkl
+    - artifacts/model
+    - configs/config.yaml
+    - src/utils/common.py
+    - src/utils/models.py
+    params:
+    - train.embedding_dim
+    - train.rnn_units
+    - evaluate.start_string
+    - evaluate.no_of_chars_to_gen
+
+  
